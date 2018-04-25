@@ -9,15 +9,19 @@
     {
       "type": "virtualbox-iso",
       "guest_os_type": "RedHat_64",
-      "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
       "iso_checksum": "{{user `iso_checksum`}}",
-      "ssh_username": "marcelo",
-      "ssh_password": "marcelo",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "ssh_username": "root",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_timeout": "600s",
+      "ssh_wait_timeout": "600s",
+      "http_directory": "./",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter>"
+      "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/http/ks.cfg<enter><wait>"
       ],
-      "shutdown_command": "sudo -S shutdown -P now"
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now"
     }
   ]
 }
