@@ -1,0 +1,5 @@
+  - name: Download Jenkins2
+    get_url: url=http://mirrors.jenkins.io/war-stable/latest/jenkins.war dest=/home/vagrant/jenkins.war
+
+  - name: Run Jenkins
+    shell:  nohup java -jar /home/vagrant/jenkins.war 2>/dev/null &
