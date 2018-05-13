@@ -1,0 +1,15 @@
+
+- name: Download apache-tomcat-7.0.88
+  get_url:
+    url: http://mirror.nbtelecom.com.br/apache/tomcat/tomcat-7/v7.0.88/bin/apache-tomcat-7.0.88.tar.gz
+    dest: /tmp/apache-tomcat-7.0.88.tar.gz
+    mode: 0777
+
+- name: Extract java 7
+  shell: tar xzf /tmp/apache-tomcat-7.0.88.tar.gz chdir=/usr/share
+
+- name: Set custom init script
+  copy: src=etc/init.d/tomcat dest=/etc/init.d/tomcat mode=0755
+
+- name: Enable tomcat to initialization
+  shell: chkconfig tomcat on
