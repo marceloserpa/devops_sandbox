@@ -1,0 +1,21 @@
+
+- name: download apache-tomcat-7.0.88
+  get_url:
+    url: http://mirror.nbtelecom.com.br/apache/tomcat/tomcat-7/v7.0.88/bin/apache-tomcat-7.0.88.tar.gz
+    dest: /tmp/apache-tomcat-7.0.88.tar.gz
+    mode: 0777
+
+- name: extract tomcat 7
+  shell: tar xzf /tmp/apache-tomcat-7.0.88.tar.gz chdir=/usr/share
+
+- name: rename tomcat folder
+  shell: mv /usr/share/apache-tomcat-7.0.88 /usr/share/tomcat
+
+- name: setting Tomcat permission
+  shell: sudo chown -R vagrant /usr/share/tomcat/webapps/ /usr/share/tomcat/work/ /usr/share/tomcat/temp/ /usr/share/tomcat/logs/ /usr/share/tomcat/conf/
+
+- name: set custom init script
+  copy: src=etc/systemd/system/tomcat.service dest=/etc/systemd/system/tomcat.service mode=0755
+
+- name: enable service tomcat
+  shell: systemctl enable tomcat && systemctl start tomcat
