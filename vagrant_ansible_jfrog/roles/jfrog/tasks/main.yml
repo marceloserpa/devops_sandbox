@@ -1,0 +1,78 @@
+- name: install unzip
+  command: sudo yum install unzip -y
+
+- name: install postgresql-server
+  command: sudo yum install postgresql-server -y
+
+- name: install postgresql-contrib
+  command: sudo yum install postgresql-contrib -y
+
+- name: install python-psycopg2
+  command: sudo yum install python-psycopg2 -y
+
+- name: run setup initdb
+  command: sudo postgresql-setup initdb
+
+- name: start postgres
+  command: sudo systemctl start postgresql
+
+- name: enable postgres
+  command: sudo systemctl enable postgresql
+
+- name: Create artifactory database
+  sudo_user: postgres
+  postgresql_db: name=artifactory encoding='UTF-8' lc_collate='en_US.UTF-8' lc_ctype='en_US.UTF-8' state=present
+
+- name: Create artifactory role for database
+  sudo_user: postgres
+  postgresql_user: db=artifactory user=artifactory password="artifactory" priv=ALL state=present
+
+- name: Grant table permissions for artifactory role
+  become: yes
+  become_user: postgres
+  postgresql_privs:
+    db: artifactory
+    role: artifactory
+    objs: ALL_IN_SCHEMA
+    privs: SELECT,INSERT,UPDATE,DELETE
+
+- name: install artifactory
+  get_url:
+    url: https://bintray.com/jfrog/artifactory/download_file?file_path=jfrog-artifactory-oss-6.0.2.zip
+    dest: /opt/jfrog-artifactory-oss-6.0.2.zip
+
+- name: unzip artifactory
+  command: unzip /opt/jfrog-artifactory-oss-6.0.2.zip -d /opt/
+
+- name: rm jfrog-artifactory-oss-6.0.2.zip
+  command: rm /opt/jfrog-artifactory-oss-6.0.2.zip
+
+- name: copy storage.properties
+  copy:
+    src: storage.properties
+    dest: /opt/artifactory-oss-6.0.2/etc/storage.properties
+
+- name: copy artifactory.default
+  copy:
+    src: artifactory.default
+    dest: /opt/artifactory-oss-6.0.2/bin/artifactory.default
+
+- name: download jdbc postgresql jar
+  get_url:
+    url: https://jdbc.postgresql.org/download/postgresql-42.2.0.jre6.jar
+    dest: /opt/artifactory-oss-6.0.2/tomcat/lib/postgresql-42.2.0.jre6.jars
+
+- name: configure permissions tomcat/conf g+r
+  file:
+    path: /opt/artifactory-oss-6.0.2/tomcat/conf/
+    mode: g+r
+    recurse: yes
+
+- name: configure own vagrant
+  command: sudo chown -R vagrant /opt/artifactory-oss-6.0.2/tomcat/work/ /opt/artifactory-oss-6.0.2/tomcat/temp/ /opt/artifactory-oss-6.0.2/logs/
+
+- name: install service
+  command: sudo /opt/artifactory-oss-6.0.2/bin/installService.sh
+
+- name: start service artifactory
+  command: sudo service artifactory start
