@@ -1,49 +1,8 @@
-- name: Install postgres dependencies
+- name: install unzip
   yum:
-    name: "{{ item }}"
+    name: unzip
   become: yes
   become_user: root
-  with_items:
-    - postgresql-server
-    - postgresql-contrib
-    - python-psycopg2
-    - unzip
-
-- name: run setup initdb
-  command: sudo postgresql-setup initdb
-
-- name: Start postgres
-  service:
-    name: postgresql
-    state: started
-    enabled: yes
-
-- name: Create artifactory database
-  sudo_user: postgres
-  postgresql_db:
-    name: artifactory
-    encoding: 'UTF-8'
-    lc_collate: 'en_US.UTF-8'
-    lc_ctype: 'en_US.UTF-8'
-    state: present
-
-- name: Create artifactory role for database
-  sudo_user: postgres
-  postgresql_user:
-    db: artifactory
-    user: artifactory
-    password: "artifactory"
-    priv: ALL
-    state: present
-
-- name: Grant table permissions for artifactory role
-  become: yes
-  become_user: postgres
-  postgresql_privs:
-    db: artifactory
-    role: artifactory
-    objs: ALL_IN_SCHEMA
-    privs: SELECT,INSERT,UPDATE,DELETE
 
 - name: install artifactory
   get_url:
@@ -56,15 +15,13 @@
 - name: rm jfrog-artifactory-oss-6.0.2.zip
   command: rm /opt/jfrog-artifactory-oss-6.0.2.zip
 
-- name: copy storage.properties
+- name: copy config files
   copy:
-    src: storage.properties
-    dest: /opt/artifactory-oss-6.0.2/etc/storage.properties
-
-- name: copy artifactory.default
-  copy:
-    src: artifactory.default
-    dest: /opt/artifactory-oss-6.0.2/bin/artifactory.default
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+     - { src: 'storage.properties', dest: '/opt/artifactory-oss-6.0.2/etc/storage.properties' }
+     - { src: 'artifactory.default', dest: '/opt/artifactory-oss-6.0.2/bin/artifactory.default' }
 
 - name: download jdbc postgresql jar
   get_url:
@@ -78,10 +35,25 @@
     recurse: yes
 
 - name: configure own vagrant
-  command: sudo chown -R vagrant /opt/artifactory-oss-6.0.2/tomcat/work/ /opt/artifactory-oss-6.0.2/tomcat/temp/ /opt/artifactory-oss-6.0.2/logs/
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: vagrant
+    mode: 0750
+    recurse: yes
+  become: yes
+  with_items:
+    - /opt/artifactory-oss-6.0.2/tomcat/work/
+    - /opt/artifactory-oss-6.0.2/tomcat/temp/
+    - /opt/artifactory-oss-6.0.2/logs/
 
 - name: install service
-  command: sudo /opt/artifactory-oss-6.0.2/bin/installService.sh
+  command: /opt/artifactory-oss-6.0.2/bin/installService.sh
+  become: true
+  become_user: root
 
 - name: start service artifactory
-  command: sudo service artifactory start
+  service:
+    name: artifactory
+    state: started
+    enabled: yes

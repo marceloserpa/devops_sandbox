@@ -5,4 +5,5 @@
 
   roles:
      - java8
+     - postgres
      - jfrog

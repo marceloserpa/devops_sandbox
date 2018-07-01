@@ -1,0 +1,47 @@
+- name: Install postgres dependencies
+  yum:
+    name: "{{ item }}"
+  become: yes
+  become_user: root
+  with_items:
+    - postgresql-server
+    - postgresql-contrib
+    - python-psycopg2
+
+- name: run setup initdb
+  command: postgresql-setup initdb
+  become: true
+  become_user: root
+
+- name: Start postgres
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Create artifactory database
+  sudo_user: postgres
+  postgresql_db:
+    name: artifactory
+    encoding: 'UTF-8'
+    lc_collate: 'en_US.UTF-8'
+    lc_ctype: 'en_US.UTF-8'
+    state: present
+
+- name: Create artifactory role for database
+  sudo_user: postgres
+  postgresql_user:
+    db: artifactory
+    user: artifactory
+    password: "artifactory"
+    priv: ALL
+    state: present
+
+- name: Grant table permissions for artifactory role
+  become: yes
+  become_user: postgres
+  postgresql_privs:
+    db: artifactory
+    role: artifactory
+    objs: ALL_IN_SCHEMA
+    privs: SELECT,INSERT,UPDATE,DELETE
