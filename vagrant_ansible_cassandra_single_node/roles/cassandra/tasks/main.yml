@@ -1,0 +1,53 @@
+
+- name: download cassandra 3.11.2
+  get_url:
+    url: https://www.apache.org/dist/cassandra/3.11.2/apache-cassandra-3.11.2-bin.tar.gz
+    dest: /tmp/apache-cassandra-3.11.2-bin.tar.gz
+    validate_certs: False
+
+- name: untar cassandra
+  command: tar -xzvf /tmp/apache-cassandra-3.11.2-bin.tar.gz -C /tmp/
+
+- name: move cassandra files
+  command: mv /tmp/apache-cassandra-3.11.2 /opt/cassandra
+  become: yes
+  become_user: root
+
+- name: setting permission
+  command: chmod -R 777 /opt/cassandra/
+  become: yes
+  become_user: root
+
+- name: copy cassandra.yml
+  copy:
+    src: opt/cassandra/conf/cassandra.yaml
+    dest: /opt/cassandra/conf/cassandra.yaml
+
+- name: adding the path in the bashrc files
+  lineinfile: dest=/root/.bashrc line='export PATH=$PATH:/opt/cassandra/bin' insertafter='EOF' regexp='export PATH=\$PATH:/opt/cassandra/bin' state=present
+  become: yes
+  become_user: root
+
+- name: source the bashrc file
+  shell: source /root/.bashrc
+  become: yes
+  become_user: root
+
+- name: create service directories
+  file:
+    path: "/var/log/cassandra"
+    state: directory
+    owner: vagrant
+    group: vagrant
+
+- name: create service directories
+  file:
+    path: "/var/log/cassandra/cassandra.log"
+    state: touch
+    owner: vagrant
+    group: vagrant
+
+- name: run cassandra
+  shell: "(nohup /opt/cassandra/bin/cassandra -f >> /var/log/cassandra/cassandra.log &)"
+  become: yes
+  become_user: vagrant
