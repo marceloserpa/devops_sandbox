@@ -1,0 +1,43 @@
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "bento/centos-7.1"
+
+  config.vm.define "node1" do |node1|
+    node1.vm.network "private_network", ip: "172.17.177.101"
+    node1.vm.network "forwarded_port", guest: 9042, host: 9042, auto_correct: true
+    node1.vm.network "forwarded_port", guest: 9160, host: 9160, auto_correct: true
+    node1.vm.network "forwarded_port", guest: 7199, host: 7199, auto_correct: true
+
+    node1.vm.provision :ansible do |ansible|
+      ansible.playbook = "playbook.yml"
+    end
+
+  end
+
+  config.vm.define "node2" do |node2|
+    node2.vm.network "private_network", ip: "172.17.177.102"
+    node2.vm.network "forwarded_port", guest: 9042, host: 9042, auto_correct: true
+    node2.vm.network "forwarded_port", guest: 9160, host: 9160, auto_correct: true
+    node2.vm.network "forwarded_port", guest: 7199, host: 7199, auto_correct: true
+
+    node2.vm.provision :ansible do |ansible|
+      ansible.playbook = "playbook.yml"
+    end
+
+  end
+
+  config.vm.define "node3" do |node3|
+    node3.vm.network "private_network", ip: "172.17.177.103"
+    node3.vm.network "forwarded_port", guest: 9042, host: 9042, auto_correct: true
+    node3.vm.network "forwarded_port", guest: 9160, host: 9160, auto_correct: true
+    node3.vm.network "forwarded_port", guest: 7199, host: 7199, auto_correct: true
+
+    node3.vm.provision :ansible do |ansible|
+      ansible.playbook = "playbook.yml"
+    end
+
+  end
+
+
+
+end
