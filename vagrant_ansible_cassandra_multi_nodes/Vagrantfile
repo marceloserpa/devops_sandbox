@@ -10,6 +10,9 @@ Vagrant.configure(2) do |config|
 
     node1.vm.provision :ansible do |ansible|
       ansible.playbook = "playbook.yml"
+      ansible.extra_vars = {
+        listen_address: "172.17.177.101"
+      }
     end
 
   end
@@ -22,6 +25,9 @@ Vagrant.configure(2) do |config|
 
     node2.vm.provision :ansible do |ansible|
       ansible.playbook = "playbook.yml"
+      ansible.extra_vars = {
+        listen_address: "172.17.177.102"
+      }
     end
 
   end
@@ -34,9 +40,14 @@ Vagrant.configure(2) do |config|
 
     node3.vm.provision :ansible do |ansible|
       ansible.playbook = "playbook.yml"
+      ansible.extra_vars = {
+        listen_address: "172.17.177.103"
+      }
     end
 
   end
+
+
 
 
 

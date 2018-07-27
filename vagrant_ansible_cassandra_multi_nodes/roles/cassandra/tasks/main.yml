@@ -47,6 +47,20 @@
     owner: vagrant
     group: vagrant
 
+- name: create scripts Directory
+  shell: mkdir /opt/cassandra/scripts/
+
+- name: copy config_cass
+  copy:
+    src: opt/cassandra/scripts/config_cass.sh
+    dest: /opt/cassandra/scripts/config_cass.sh
+
+- name: setting executable permissions
+  shell: chmod +x /opt/cassandra/scripts/config_cass.sh
+
+- name: run config_cass.sh
+  shell: sh /opt/cassandra/scripts/config_cass.sh {{listen_address}}
+
 - name: run cassandra
   shell: "(nohup /opt/cassandra/bin/cassandra -f >> /var/log/cassandra/cassandra.log &)"
   become: yes
