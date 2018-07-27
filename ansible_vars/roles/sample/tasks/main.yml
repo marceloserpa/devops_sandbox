@@ -1,0 +1,14 @@
+- name: copy script
+  copy:
+    src: folder_prepare.sh
+    dest: /home/vagrant/folder_prepare.sh
+
+- name: setting permission
+  command: chmod +x /home/vagrant/folder_prepare.sh
+  become: yes
+  become_user: root
+
+- name: run folder_prepare
+  shell: "/home/vagrant/folder_prepare.sh {{folder_name}}"
+  become: true
+  become_user: root
