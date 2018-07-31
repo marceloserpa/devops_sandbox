@@ -1,0 +1,30 @@
+- name: install unzip
+  yum:
+    name: unzip
+  become: yes
+  become_user: root
+
+- name: download jetty 9.4.11.v20180605
+  get_url:
+    url: https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.11.v20180605/jetty-distribution-9.4.11.v20180605.zip
+    dest: /opt/jetty-distribution-9.4.11.v20180605.zip
+
+- name: unzip jetty
+  command: unzip /opt/jetty-distribution-9.4.11.v20180605.zip -d /opt/
+
+- name: remove jetty-distribution-9.4.11.v20180605.zip
+  command: rm /opt/jetty-distribution-9.4.11.v20180605.zip
+
+- name: configure own vagrant
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: vagrant
+    mode: 0750
+    recurse: yes
+  become: yes
+  with_items:
+    - /opt/jetty-distribution-9.4.11.v20180605/bin/
+
+- name: starting jetty
+  shell: sudo sh /opt/jetty-distribution-9.4.11.v20180605/bin/jetty.sh start
