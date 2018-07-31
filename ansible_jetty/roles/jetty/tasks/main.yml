@@ -27,4 +27,4 @@
     - /opt/jetty-distribution-9.4.11.v20180605/bin/
 
 - name: starting jetty
-  shell: sudo sh /opt/jetty-distribution-9.4.11.v20180605/bin/jetty.sh start
+  shell: sudo nohup sh /opt/jetty-distribution-9.4.11.v20180605/bin/jetty.sh start &
