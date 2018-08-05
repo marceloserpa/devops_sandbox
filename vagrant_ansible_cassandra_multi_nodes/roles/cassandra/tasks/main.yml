@@ -1,15 +1,15 @@
 
-- name: download cassandra 3.11.2
+- name: download cassandra 3.x
   get_url:
-    url: https://www.apache.org/dist/cassandra/3.11.2/apache-cassandra-3.11.2-bin.tar.gz
-    dest: /tmp/apache-cassandra-3.11.2-bin.tar.gz
+    url: https://archive.apache.org/dist/cassandra/3.11.3/apache-cassandra-3.11.3-bin.tar.gz
+    dest: /tmp/apache-cassandra-3.11.3-bin.tar.gz
     validate_certs: False
 
 - name: untar cassandra
-  command: tar -xzvf /tmp/apache-cassandra-3.11.2-bin.tar.gz -C /tmp/
+  command: tar -xzvf /tmp/apache-cassandra-3.11.3-bin.tar.gz -C /tmp/
 
 - name: move cassandra files
-  command: mv /tmp/apache-cassandra-3.11.2 /opt/cassandra
+  command: mv /tmp/apache-cassandra-3.11.3 /opt/cassandra
   become: yes
   become_user: root
 

@@ -9,7 +9,7 @@ Enter inside this directory and run:
 vagrant up
 ```
 
-Enter inside some node and run nodetool status. You will see something like this:
+Enter inside some node and run nodetool status, you will see something like this:
 
 ```
 [vagrant@localhost ~]$ /opt/cassandra/bin/nodetool status
@@ -23,6 +23,12 @@ UN  172.17.177.103  69.96 KiB  256          67,4%             95e1bf8e-5c73-4000
 UN  172.17.177.102  87.81 KiB  256          67,5%             4b867335-6d6c-45fb-b675-937c5b16355b  rack1
 
 [vagrant@localhost ~]$
+```
+
+Running repair
+
+```
+ /opt/cassandra/bin/nodetool -h localhost repair -local
 ```
 
 
