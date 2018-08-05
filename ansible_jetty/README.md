@@ -14,7 +14,7 @@ vagrant destroy
 
 
 ## TODO
-v expose thread metrics via JMX
+- (DONE) expose thread metrics via JMX
 - tunning threads limits
 - run jetty as unix service
 - install JMX metrics client
