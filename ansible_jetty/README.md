@@ -18,3 +18,4 @@ vagrant destroy
 - tunning threads limits
 - run jetty as unix service
 - install JMX metrics client
+- improve jetty logs

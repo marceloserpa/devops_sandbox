@@ -26,5 +26,14 @@
   with_items:
     - /opt/jetty-distribution-9.4.11.v20180605/bin/
 
+- name: copy config files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: opt/jetty-distribution-9.4.11.v20180605/start.ini, dest: /opt/jetty-distribution-9.4.11.v20180605/start.ini  }
+    - { src: opt/jetty-distribution-9.4.11.v20180605/etc/jetty.conf, dest: /opt/jetty-distribution-9.4.11.v20180605/etc/jetty.conf  }
+    - { src: opt/jetty-distribution-9.4.11.v20180605/etc/jetty-jmx.xml, dest: /opt/jetty-distribution-9.4.11.v20180605/etc/jetty-jmx.xml  }
+
 - name: starting jetty
   shell: sudo nohup sh /opt/jetty-distribution-9.4.11.v20180605/bin/jetty.sh start &
