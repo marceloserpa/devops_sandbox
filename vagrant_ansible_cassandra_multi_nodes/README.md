@@ -41,4 +41,5 @@ vagrant destroy
  - export env vars
  - refactor tasks to use other components
  - create cassandra user
- - add ansible var for cassandra version  
+ v add ansible var for cassandra version  
+ - add support for cassandra 2x
