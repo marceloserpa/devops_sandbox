@@ -1,0 +1,31 @@
+- name: downloading Gatling
+  shell: wget https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/2.3.1/gatling-charts-highcharts-bundle-2.3.1-bundle.zip
+
+- name: untar Gatling
+  shell: unzip gatling-charts-highcharts-bundle-2.3.1-bundle.zip
+    become: yes
+    become_user: root
+
+- name: creating gatling directory
+  shell: mkdir /opt/gatling
+    become: yes
+    become_user: root
+
+- name: copy gatling files
+  shell: cp -r gatling-charts-highcharts-bundle-2.3.1/* /opt/gatling/
+    become: yes
+    become_user: root
+
+- name: remove downloaded files
+  shell: rm -r gatling-charts-highcharts-bundle-*
+    become: yes
+    become_user: root
+
+- name:  make gatling.sh executable
+  shell:  chmod -x /opt/gatling/bin/gatling.sh
+    become: yes
+    become_user: root
+
+
+- name: update  
+  shell: sudo yum update -y
