@@ -1,6 +1,8 @@
 
+#k8s-nodejs-poc
+
 First you need to install kubectl and minikube to perform the following commands.
-I created this gist to show how install kubectl and minikube.
+I created this gist [https://gist.github.com/marceloserpa/2a8d71c8bcd3b130420d162f2c8341d2] to show how install kubectl and minikube.
 
 Start minikube
 ```
