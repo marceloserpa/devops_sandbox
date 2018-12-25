@@ -1,0 +1,15 @@
+resources:
+- name: marcelo-instance-poc
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/family/debian-9
+    networkInterfaces:
+    - network: global/networks/{{ properties["network"] }}
