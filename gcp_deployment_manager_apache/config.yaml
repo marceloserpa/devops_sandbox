@@ -5,8 +5,6 @@ resources:
 - name: marcelo-instance-poc
   type: instance.jinja
   properties:
-    machineType: n1-standard-1 # Sets the 'machineType' template property
+    machineType: f1-micro # Sets the 'machineType' template property
     zone: us-central1-a # Sets the 'zone' template property
     network: default # Sets the 'network' template property
-    tags:
-      - http

@@ -12,4 +12,25 @@ resources:
       initializeParams:
         sourceImage: projects/debian-cloud/global/images/family/debian-9
     networkInterfaces:
-    - network: global/networks/{{ properties["network"] }}
+    - network: global/networks/{{ properties["network"] }}    
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get install apache2 php7.0
+    tags:
+      items:
+        - http-server
+        - firewall-rule-internet
+
+- name: firewall-rule-internet
+  type: compute.v1.firewall
+  properties:
+    allowed:
+      - IPProtocol: TCP
+        ports: [ 80, 8080 ]
+    sourceRanges: [ 0.0.0.0/0 ]
