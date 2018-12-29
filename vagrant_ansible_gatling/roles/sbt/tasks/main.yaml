@@ -1,0 +1,9 @@
+---
+- name: Download SBT
+  shell: wget https://piccolo.link/sbt-1.2.7.zip
+
+- name: Unzip
+  shell: unzip sbt-1.2.7.zip
+
+- name: 'Move sbt to opt directory'
+  shell: 'sudo mv sbt /opt/'

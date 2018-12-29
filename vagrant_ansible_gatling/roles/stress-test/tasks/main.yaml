@@ -1,0 +1,11 @@
+- name: Creating stress test directory
+  command: "mkdir /opt/stress-test"
+
+- name: Download stress test scenarios
+  command: "git clone https://github.com/marceloserpa/gatling-poc"
+
+- name: Copy
+  command: "cp -R gatling-poc/stress-tests-fun/* /opt/stress-test/"
+
+- name: Clean
+  command: "rm -r gatling-poc"
