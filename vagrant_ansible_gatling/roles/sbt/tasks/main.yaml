@@ -1,4 +1,10 @@
 ---
+- name: Download Scala
+  shell: sudo wget http://downloads.lightbend.com/scala/2.12.7/scala-2.12.7.rpm
+
+- name: Install Scala
+  shell: sudo yum install scala-2.12.7.rpm 
+
 - name: Download SBT
   shell: wget https://piccolo.link/sbt-1.2.7.zip
 

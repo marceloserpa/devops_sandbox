@@ -4,7 +4,9 @@
   become_user: root
 
   roles:
-     - unzip
+     - base
      - java8
+     - sbt
      - git
-     - gatling
+     - stress-test
+     #- gatling
