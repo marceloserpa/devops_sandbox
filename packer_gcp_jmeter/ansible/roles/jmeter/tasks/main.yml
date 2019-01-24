@@ -1,0 +1,8 @@
+  - name: Download JMeter
+    command: "wget http://ftp.unicamp.br/pub/apache//jmeter/binaries/apache-jmeter-5.0.zip"
+
+  - name: Unzip
+    command: "unzip apache-jmeter-5.0.zip"
+
+  - name: Create dir
+    command: "mv apache-jmeter-5.0 /opt/"

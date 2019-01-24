@@ -1,0 +1,8 @@
+  - name: Download Java8 RPM package
+    command: "wget  --no-cookies --no-check-certificate --header 'Cookie: oraclelicense=accept-securebackup-cookie' https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.rpm"
+
+  - name: Install Java8 RPM package
+    command: "rpm -ivh jdk-8u201-linux-x64.rpm"
+
+  - name: Delete RPM package
+    command: "rm jdk-8u201-linux-x64.rpm"

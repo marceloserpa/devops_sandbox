@@ -1,0 +1,25 @@
+{
+  "variables": {
+    "project_id": "",
+    "account_file": ""
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "{{user `account_file`}}",
+      "project_id": "{{user `project_id`}}",
+      "image_name": "packer-marcelo-jmeter-image" ,
+      "source_image": "centos-7-v20181210",
+      "ssh_username": "packer",
+      "machine_type" : "f1-micro",
+      "zone": "us-central1-a",
+      "tags": "http-server"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/playbook.yml"
+    }
+  ]
+}

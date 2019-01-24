@@ -1,0 +1,10 @@
+- name: Installing necessary libs
+  shell: sudo yum update -y nss curl libcur
+
+- name: Installing wget
+  shell: sudo yum install wget
+
+- name: Install the latest version of unzip
+  yum:
+    name: unzip
+    state: latest
