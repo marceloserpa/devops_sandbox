@@ -1,0 +1,52 @@
+- name: Install MySQL repository
+  yum: 
+    name: https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+    state: present
+
+- name: Install MySQL
+  yum: 
+    name: mysql-community-server
+    state: present
+
+- name: Start and enable service mysqld
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+
+- name: Install PIP
+  yum: 
+    name: python-pip
+    state: present  
+
+- name: Install  python-devel
+  yum: 
+    name: python-devel
+    state: present 
+    
+- name: Install mysql-devel  
+  yum: 
+    name: mysql-devel  
+    state: present  
+
+- name: Install python-setuptools
+  yum: 
+    name: python-setuptools
+    state: present  
+
+
+- name: Install gcc
+  yum: 
+    name: gcc
+    state: present  
+
+
+
+- name: Install the Python MySQLB module
+  pip: name=mysql-python    
+
+- name: Set root user password
+  mysql_user:
+    name: root
+    password: "16R00t"
+    check_implicit_admin: true    
