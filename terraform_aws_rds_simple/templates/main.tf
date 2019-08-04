@@ -25,4 +25,5 @@ resource "aws_db_instance" "rds_mysql_poc_db" {
   password             = "admin12345"
   parameter_group_name = "default.mysql5.7"
   skip_final_snapshot  = true
+  final_snapshot_identifier = "Ignore"
 }
