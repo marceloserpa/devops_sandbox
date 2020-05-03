@@ -1,6 +1,6 @@
 $script = <<-SCRIPT
 curl -sL https://rpm.nodesource.com/setup_13.x | sudo -E bash -
-sudo yum install nodejs
+sudo yum install -y nodejs
 sudo yum install -y java-1.8.0-openjdk
 curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.2-x86_64.rpm
 sudo rpm -i elasticsearch-7.6.2-x86_64.rpm
