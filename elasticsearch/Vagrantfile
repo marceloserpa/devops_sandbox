@@ -1,0 +1,28 @@
+$script = <<-SCRIPT
+curl -sL https://rpm.nodesource.com/setup_13.x | sudo -E bash -
+sudo yum install nodejs
+sudo yum install -y java-1.8.0-openjdk
+curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.2-x86_64.rpm
+sudo rpm -i elasticsearch-7.6.2-x86_64.rpm
+rm elasticsearch-7.6.2-x86_64.rpm
+sudo systemctl daemon-reload
+sudo systemctl enable elasticsearch.service
+sudo systemctl start elasticsearch.service
+SCRIPT
+
+
+Vagrant.configure(2) do |config|
+  
+    config.vm.provider "virtualbox" do |vb|
+    end
+    
+    config.vm.provision "shell", inline: $script
+
+    config.vm.box = "hashicorp-vagrant/centos-7.4"
+    
+    config.vm.network "private_network", ip: "192.168.33.10"
+    config.vm.network "forwarded_port", guest: 9200, host: 9000
+
+    config.vm.synced_folder ".", "/vagrant"
+  
+  end
