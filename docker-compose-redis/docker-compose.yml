@@ -1,0 +1,14 @@
+version: "3.2"
+
+services:
+ redis:
+    image: "redis:latest"
+    command: ["redis-server", "--requirepass", "mypassword123", "--appendonly", "yes"]
+    ports:
+     - "6379:6379"
+    volumes:
+     - redis-data:/data
+
+volumes:
+  redis-data:
+    driver: local
