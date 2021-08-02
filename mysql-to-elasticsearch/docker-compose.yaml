@@ -1,0 +1,71 @@
+version: '3.1'
+
+services:
+
+  mysql:
+    container_name: poc-mysql
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: poc
+    volumes:
+      - "./mysql/setup.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./mysql/schema.sql:/docker-entrypoint-initdb.d/2.sql"
+    networks: 
+      - local-network
+
+  adminer:
+    container_name: poc-adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks: 
+      - local-network      
+
+  elasticsearch:
+    container_name: poc-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      xpack.monitoring.enabled: "true"
+    volumes:
+      - ./esdata:/usr/share/elasticsearch/data
+    networks: 
+      - local-network      
+      
+  kibana:
+    container_name: poc-kibana
+    image: docker.elastic.co/kibana/kibana:7.7.0
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks: 
+      - local-network      
+
+  logstash:
+    container_name: poc-logstash
+    build: 
+      dockerfile: ${PWD}/logstash/Dockerfile
+      context: ${PWD}/logstash/
+    ports:
+      - 9600:9600
+      - 5044:5044
+    depends_on:
+      - mysql
+      - elasticsearch
+    networks: 
+      - local-network           
+
+networks: 
+  local-network:
+    driver: bridge        
