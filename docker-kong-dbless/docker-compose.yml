@@ -1,0 +1,27 @@
+
+version: '3.9'
+
+services:
+
+  kong-gateway:
+    image: kong:latest
+    container_name: kong-gateway
+    restart: always
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: kong.yml
+    volumes:
+      - ./kong.yml:/kong.yml 
+    ports:
+      - "0.0.0.0:8000:8000/tcp"
+      - "0.0.0.0:8443:8443/tcp"
+
+      # ADMIN ports
+      - "0.0.0.0:8001:8001/tcp"
+      - "127.0.0.1:8444:8444/tcp"
+    networks:
+      - kong-net 
+
+networks:
+  kong-net: 
+    external: false
