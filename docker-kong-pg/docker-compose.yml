@@ -33,8 +33,31 @@ services:
     networks:
       - kong-net
     restart: on-failure
+ 
+  kong-gateway:
+    image: kong:latest
+    container_name: kong-gateway
+    restart: always
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-postgres
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+      
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001,0.0.0.0:8444"
+    ports:
+      - "0.0.0.0:8000:8000/tcp"
+      - "0.0.0.0:8443:8443/tcp"
 
-
+      # ADMIN ports
+      - "0.0.0.0:8001:8001/tcp"
+      - "127.0.0.1:8444:8444/tcp"
+    networks:
+      - kong-net 
+    depends_on:
+      - kong-postgres
+      - kong-migrations
 
 networks:
   kong-net: 
+    external: false
