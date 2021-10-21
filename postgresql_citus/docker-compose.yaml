@@ -1,0 +1,12 @@
+
+version: '3.7'
+
+services:
+
+  postgres-citus:
+    container_name: "citus_standalone"
+    image: citusdata/citus
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=mypassword
