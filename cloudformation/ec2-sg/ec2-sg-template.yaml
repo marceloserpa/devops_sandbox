@@ -1,0 +1,50 @@
+Parameters:
+
+  ApplicationAMI:
+    Type: String
+    Default: ami-0cfa11357157db4ba
+
+  SubnetId:
+    Type: String
+    Default: subnet-048f8e97427ff43c3
+  
+  VPCId:
+    Type: String
+    Default: vpc-056597d490629360f
+  
+  KP:
+    Type: String
+    Default: marcelo-personal-poc
+
+Resources:
+
+  Ec2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      KeyName: !Ref KP
+      ImageId:  !Ref ApplicationAMI
+      SubnetId: !Ref SubnetId
+      InstanceType: 't2.micro'
+      Tags: 
+        - Key: 'author'
+          Value: 'MarceloSerpa'
+        - Key: 'type'
+          Value: 'PoC'
+
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      VpcId: !Ref VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags: 
+        - Key: 'author'
+          Value: 'Marcelo Serpa'
+        - Key: 'type'
+          Value: 'PoC'
