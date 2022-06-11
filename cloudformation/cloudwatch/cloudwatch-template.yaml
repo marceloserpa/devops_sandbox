@@ -1,0 +1,25 @@
+Resources:
+
+  MyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties: 
+      AlarmDescription: 'Test PoC'
+      AlarmName: 'AlertCloudFormation'
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Dimensions: 
+        - Name: Consumer
+          Value: my-consumer-app
+
+        - Name: Group
+          Value: group   
+
+        - Name: Topic
+          Value: marcelo-topic            
+
+      MetricName: SumOffsetLag
+      Namespace: AWS/Kafka
+      Period: 60
+      Statistic: Average
+      Threshold: 500
+      Unit: Count
