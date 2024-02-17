@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+
+  BucketName:
+    Type: String
+    Default: mserpa-private-bucket
+
+Resources:
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketName: !Ref BucketName
+      Tags:
+        - Key: description
+          Value: "Micro-frontend static files"
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - '*'
+            ExposedHeaders:
+              - Date
+            Id: myCORSRuleId1
+            MaxAge: 3600             
+
+  CloudFrontOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'CloudFront OAI for ${BucketName}' 
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginIdentity}'
+            Action: 's3:GetObject'
+            Resource: !Sub 'arn:aws:s3:::${BucketName}/*'
+
+  PublicDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !Sub '${BucketName}.s3.us-east-1.amazonaws.com'
+            Id: !Sub 'S3-${BucketName}'
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
+        Enabled: 'true'
+        DefaultRootObject: 'index.html'
+        Comment: MicroFront Remote 1
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: !Sub 'S3-${BucketName}'
+          ForwardedValues:
+            QueryString: 'false'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: allow-all
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: 'true'   
+
+Outputs:
+  DistributionDomainName:
+    Description: Distribution domain
+    Value: !GetAtt PublicDistribution.DomainName
