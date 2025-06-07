@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:  
+
+  rabbitmq-01:
+    image: rabbitmq:3-management
+    container_name: rabbit-broker-01
+    networks:
+      - docker-local-network 
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq-01/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq-01/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5    
+
+
+  rabbitmq-02:
+    image: rabbitmq:3-management
+    container_name: rabbit-broker-02
+    networks:
+      - docker-local-network 
+    ports:
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - ./rabbitmq-02/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq-02/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5          
+
+networks: 
+  docker-local-network:
+    driver: bridge  
